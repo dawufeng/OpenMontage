@@ -85,8 +85,8 @@ class SeedanceVideo(BaseTool):
             "model_variant": {
                 "type": "string",
                 "enum": ["standard", "fast"],
-                "default": "standard",
-                "description": "standard = highest quality, fast = lower latency and cost",
+                "default": "fast",
+                "description": "fast = lower latency and cost, standard = highest quality",
             },
             "model_version": {
                 "type": "string",
@@ -222,7 +222,7 @@ class SeedanceVideo(BaseTool):
                 ),
                 2,
             )
-        variant = inputs.get("model_variant", "standard")
+        variant = inputs.get("model_variant", "fast")
         duration = inputs.get("duration", "5")
         secs = 5 if duration == "auto" else int(duration)
         rate = 0.2419 if variant == "fast" else 0.3034
@@ -231,7 +231,7 @@ class SeedanceVideo(BaseTool):
     def estimate_runtime(self, inputs: dict[str, Any]) -> float:
         if inputs.get("model_version", "2.0") == "2.5":
             return 150.0
-        variant = inputs.get("model_variant", "standard")
+        variant = inputs.get("model_variant", "fast")
         return 60.0 if variant == "fast" else 120.0
 
     def execute(self, inputs: dict[str, Any]) -> ToolResult:

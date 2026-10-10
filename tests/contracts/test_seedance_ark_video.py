@@ -49,8 +49,14 @@ class TestContract:
 
     def test_status_requires_ark_api_key(self, monkeypatch):
         monkeypatch.delenv("ARK_API_KEY", raising=False)
+        monkeypatch.delenv("VOLCENGINE_ARK_API_KEY", raising=False)
         assert SeedanceArkVideo().get_status() == ToolStatus.UNAVAILABLE
         monkeypatch.setenv("ARK_API_KEY", "fake-ark-key")
+        assert SeedanceArkVideo().get_status() == ToolStatus.AVAILABLE
+
+    def test_status_falls_back_to_volcengine_ark_api_key(self, monkeypatch):
+        monkeypatch.delenv("ARK_API_KEY", raising=False)
+        monkeypatch.setenv("VOLCENGINE_ARK_API_KEY", "fake-ark-key")
         assert SeedanceArkVideo().get_status() == ToolStatus.AVAILABLE
 
     def test_official_model_ids(self):

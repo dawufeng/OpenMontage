@@ -7,10 +7,10 @@ import {
   useVideoConfig,
 } from "remotion";
 import React from "react";
-import { loadFont as loadPlayfair } from "@remotion/google-fonts/PlayfairDisplay";
+import { loadPlayfairDisplay } from "./localFonts";
 import { resolveAsset } from "./lib/resolveAsset";
 
-const { fontFamily: playfairItalic } = loadPlayfair("italic", {
+const { fontFamily: playfairItalic } = loadPlayfairDisplay("italic", {
   weights: ["400", "700"],
   subsets: ["latin"],
 });

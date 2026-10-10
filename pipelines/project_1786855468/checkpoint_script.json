@@ -1,0 +1,112 @@
+{
+  "version": "1.0",
+  "project_id": "project_1786855468",
+  "pipeline_type": "animation",
+  "stage": "script",
+  "status": "awaiting_human",
+  "timestamp": "2026-08-16T04:56:03.345141+00:00",
+  "checkpoint_policy": "guided",
+  "human_approval_required": true,
+  "human_approved": false,
+  "artifacts": {
+    "script": {
+      "version": "1.0",
+      "title": "\u9759\u754c Pro \u2014\u2014 \u566a\u97f3\uff0c\u6d88\u5931",
+      "total_duration_seconds": 30,
+      "sections": [
+        {
+          "id": "s1",
+          "label": "hook",
+          "text": "\u4e16\u754c\u592a\u5435\u4e86\u3002",
+          "start_seconds": 0,
+          "end_seconds": 2.5,
+          "speaker_directions": "\u6c89\u7a33\u3001\u7565\u5e26\u538b\u8feb\uff0c\u77ed\u53e5\u6536\u675f",
+          "enhancement_cues": [
+            {
+              "type": "animation",
+              "description": "\u5608\u6742\u58f0\u6ce2\u6296\u52a8 + \u5927\u5b57\u300c\u4e16\u754c\u592a\u5435\u4e86\u300d",
+              "timestamp_seconds": 0.5
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "label": "noise_problem",
+          "text": "\u5730\u94c1\u7684\u8f70\u9e23\u3001\u952e\u76d8\u7684\u6572\u51fb\u3001\u5b69\u5b50\u7684\u54ed\u95f9\u2026\u2026",
+          "start_seconds": 2.5,
+          "end_seconds": 7,
+          "speaker_directions": "\u8bed\u901f\u7565\u5feb\uff0c\u4e09\u8fde\u5217\u4e3e\uff0c\u672b\u5c3e\u7701\u7565\u53f7\u7559\u7a7a",
+          "enhancement_cues": [
+            {
+              "type": "overlay",
+              "description": "\u4e09\u4e2a\u566a\u97f3\u6765\u6e90\u6807\u7b7e\u4f9d\u6b21\u5f39\u51fa\uff1a\u5730\u94c1 / \u952e\u76d8 / \u54ed\u95f9",
+              "timestamp_seconds": 3
+            }
+          ]
+        },
+        {
+          "id": "s3",
+          "label": "anc_solution",
+          "text": "\u6234\u4e0a\u9759\u754c Pro\uff0c\u4e00\u952e\u5f00\u542f\u81ea\u9002\u5e94\u4e3b\u52a8\u964d\u566a\u3002\u566a\u97f3\uff0c\u77ac\u95f4\u5f52\u96f6\u3002",
+          "start_seconds": 7,
+          "end_seconds": 15,
+          "speaker_directions": "\u7531\u7d27\u5f20\u8f6c\u5411\u677e\u5f1b\uff0c\u300c\u77ac\u95f4\u5f52\u96f6\u300d\u5904\u5e72\u8106\u6709\u529b",
+          "enhancement_cues": [
+            {
+              "type": "stat_card",
+              "description": "-48dB \u81ea\u9002\u5e94\u4e3b\u52a8\u964d\u566a \u6570\u636e\u5361",
+              "timestamp_seconds": 9
+            },
+            {
+              "type": "animation",
+              "description": "\u58f0\u6ce2\u584c\u7f29\u4e3a\u4e00\u6761\u76f4\u7ebf\uff08\u964d\u566a\u751f\u6548\uff09",
+              "timestamp_seconds": 11
+            }
+          ]
+        },
+        {
+          "id": "s4",
+          "label": "battery",
+          "text": "\u7eed\u822a\u540c\u6837\u60ca\u4eba\uff1a\u5355\u6b21 12 \u5c0f\u65f6\uff0c\u914d\u5145\u7535\u76d2 48 \u5c0f\u65f6\uff0c\u957f\u5230\u5fd8\u8bb0\u5145\u7535\u8fd9\u56de\u4e8b\u3002",
+          "start_seconds": 15,
+          "end_seconds": 24,
+          "speaker_directions": "\u81ea\u4fe1\u3001\u4ece\u5bb9\uff0c\u6570\u5b57\u5904\u52a0\u91cd",
+          "enhancement_cues": [
+            {
+              "type": "stat_card",
+              "description": "\u5355\u6b21 12 \u5c0f\u65f6 \u5927\u6570\u5b57\u6eda\u52a8",
+              "timestamp_seconds": 16
+            },
+            {
+              "type": "stat_card",
+              "description": "\u914d\u5145\u7535\u76d2 48 \u5c0f\u65f6 \u5927\u6570\u5b57\u6eda\u52a8",
+              "timestamp_seconds": 20
+            }
+          ]
+        },
+        {
+          "id": "s5",
+          "label": "cta",
+          "text": "\u9759\u754c Pro\u3002\u8ba9\u4e16\u754c\u5b89\u9759\u4e0b\u6765\u3002",
+          "start_seconds": 24,
+          "end_seconds": 30,
+          "speaker_directions": "\u6536\u675f\u3001\u7559\u767d\u3001\u54c1\u724c\u611f\uff0c\u53e5\u672b\u6e10\u5f31",
+          "enhancement_cues": [
+            {
+              "type": "overlay",
+              "description": "\u4ea7\u54c1\u4e3b\u89c6\u89c9 + \u54c1\u724c\u540d\u300c\u9759\u754c Pro\u300d\u5b9a\u683c",
+              "timestamp_seconds": 25
+            }
+          ]
+        }
+      ],
+      "metadata": {
+        "language": "zh-CN",
+        "voice_direction": "\u5e74\u8f7b\u7537\u58f0\uff0c\u6c89\u7a33\u79d1\u6280\u611f\uff0c\u5e7f\u544a\u8bed\u6c14\uff0c\u53e5\u672b\u5e72\u51c0",
+        "narration_total_chars": 106,
+        "visual_holds_seconds": 6
+      }
+    }
+  },
+  "style_playbook": "flat-motion-graphics"
+}

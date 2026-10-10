@@ -138,8 +138,9 @@ class SeedanceArkVideo(BaseTool):
 
     dependencies = ["env:ARK_API_KEY"]
     install_instructions = (
-        "Set ARK_API_KEY to the API Key body from Volcengine Ark (without "
-        "the 'Bearer ' prefix). Optional: ARK_SEEDANCE_MODEL and ARK_BASE_URL."
+        "Set ARK_API_KEY (or VOLCENGINE_ARK_API_KEY) to the API Key body from "
+        "Volcengine Ark (without the 'Bearer ' prefix). Optional: "
+        "ARK_SEEDANCE_MODEL and ARK_BASE_URL."
     )
     agent_skills = ["seedance-2-0", "seedance-2-5", "ai-video-gen"]
 
@@ -352,7 +353,7 @@ class SeedanceArkVideo(BaseTool):
     ]
 
     def _get_api_key(self) -> str | None:
-        return os.environ.get("ARK_API_KEY")
+        return os.environ.get("ARK_API_KEY") or os.environ.get("VOLCENGINE_ARK_API_KEY")
 
     def _get_base_url(self) -> str:
         base_url = os.environ.get("ARK_BASE_URL", self.BASE_URL).rstrip("/")

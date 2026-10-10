@@ -1,0 +1,172 @@
+{
+  "version": "1.0",
+  "project_id": "project_1786855468",
+  "pipeline_type": "animation",
+  "stage": "scene_plan",
+  "status": "awaiting_human",
+  "timestamp": "2026-08-16T04:56:03.504533+00:00",
+  "checkpoint_policy": "guided",
+  "human_approval_required": true,
+  "human_approved": false,
+  "artifacts": {
+    "scene_plan": {
+      "version": "1.0",
+      "style_playbook": "flat-motion-graphics",
+      "scenes": [
+        {
+          "id": "sc1",
+          "type": "text_card",
+          "description": "\u6df1\u8272\u80cc\u666f\u4e0a\u300c\u4e16\u754c\u592a\u5435\u4e86\u300d\u56db\u5b57\u52a8\u6548\u5b57\u4f53\u9010\u5b57\u5f39\u51fa\uff0c\u80cc\u666f\u82e5\u9690\u82e5\u73b0\u7684\u5608\u6742\u58f0\u6ce2\u6296\u52a8\u3002",
+          "start_seconds": 0,
+          "end_seconds": 2.5,
+          "script_section_id": "s1",
+          "framing": "\u7ad6\u5c4f 9:16\uff0c\u6807\u9898\u5c45\u4e2d\u504f\u4e0a\uff0c\u58f0\u6ce2\u5c45\u4e0b",
+          "movement": "\u6587\u5b57 scale+opacity \u5f39\u6027\u5165\u573a",
+          "transition_in": "cut",
+          "transition_out": "cut",
+          "overlay_notes": "\u5e95\u90e8\u58f0\u6ce2\u7ebf\u6761\uff08CSS/SVG\uff09",
+          "shot_intent": "\u524d\u4e09\u79d2\u5efa\u7acb\u51b2\u7a81\uff0c\u6293\u4f4f\u6ce8\u610f\u529b",
+          "narrative_role": "establish_context",
+          "information_role": "\u7528\u6237\u610f\u8bc6\u5230\u300c\u5435\u300d\u662f\u75db\u70b9",
+          "hero_moment": false,
+          "required_assets": []
+        },
+        {
+          "id": "sc2",
+          "type": "animation",
+          "description": "\u5608\u6742\u58f0\u6ce2\u5267\u70c8\u6296\u52a8\uff0c\u4e09\u4e2a\u566a\u97f3\u6765\u6e90\u6807\u7b7e\uff08\u5730\u94c1 / \u952e\u76d8 / \u54ed\u95f9\uff09\u4f9d\u6b21\u5f39\u51fa\u3002",
+          "start_seconds": 2.5,
+          "end_seconds": 7,
+          "script_section_id": "s2",
+          "framing": "\u58f0\u6ce2\u5360\u6ee1\u4e0b\u90e8\uff0c\u6807\u7b7e\u4ece\u753b\u9762\u8fb9\u7f18\u6ed1\u5165",
+          "movement": "\u58f0\u6ce2\u9ad8\u9891\u6296\u52a8\uff1b\u6807\u7b7e staggered slide-in",
+          "transition_in": "cut",
+          "transition_out": "cut",
+          "overlay_notes": "\u4e09\u4e2a\u6807\u7b7e\uff1a\u5730\u94c1 / \u952e\u76d8 / \u54ed\u95f9",
+          "shot_intent": "\u628a\u300c\u5435\u300d\u5177\u8c61\u5316\uff0c\u7d2f\u79ef\u538b\u8feb\u611f",
+          "narrative_role": "build_tension",
+          "information_role": "\u89c2\u4f17\u8bc6\u522b\u5177\u4f53\u566a\u97f3\u573a\u666f",
+          "hero_moment": false,
+          "required_assets": []
+        },
+        {
+          "id": "sc3",
+          "type": "animation",
+          "description": "\u58f0\u6ce2\u77ac\u95f4\u584c\u7f29\u4e3a\u4e00\u6761\u76f4\u7ebf\uff08\u964d\u566a\u751f\u6548\uff09\uff0c\u968f\u540e\u300c-48dB \u81ea\u9002\u5e94\u4e3b\u52a8\u964d\u566a\u300d\u6570\u636e\u5361\u5f39\u51fa\u3002",
+          "start_seconds": 7,
+          "end_seconds": 15,
+          "script_section_id": "s3",
+          "framing": "\u76f4\u7ebf\u5c45\u4e2d\uff0c\u6570\u636e\u5361\u4e0b\u65b9\u5f39\u51fa",
+          "movement": "\u58f0\u6ce2 amplitude \u6536\u675f\u4e3a 0\uff1b\u6570\u636e\u5361 spring \u5f39\u5165",
+          "transition_in": "cut",
+          "transition_out": "cut",
+          "overlay_notes": "\u6570\u636e\u5361\uff1a-48dB \u81ea\u9002\u5e94\u4e3b\u52a8\u964d\u566a",
+          "shot_intent": "\u5168\u7247\u89c6\u89c9\u5cf0\u503c\uff1a\u566a\u97f3\u2192\u5f52\u96f6\u7684\u723d\u70b9",
+          "narrative_role": "deliver_payload",
+          "information_role": "\u89c2\u4f17\u8bb0\u4f4f\u300c-48dB \u964d\u566a\u300d\u5356\u70b9",
+          "hero_moment": true,
+          "required_assets": []
+        },
+        {
+          "id": "sc4",
+          "type": "animation",
+          "description": "\u7535\u91cf\u6761\u51e0\u4e4e\u4e0d\u52a8\uff0c\u5927\u6570\u5b57\u300c12 \u5c0f\u65f6\u300d\u6eda\u52a8\u5230\u4f4d\uff0c\u4e0b\u6ce8\u300c\u5355\u6b21\u7eed\u822a\u300d\u3002",
+          "start_seconds": 15,
+          "end_seconds": 20,
+          "script_section_id": "s4",
+          "framing": "\u7535\u91cf\u6761\u5c45\u4e0a\uff0c\u5927\u6570\u5b57\u5c45\u4e2d",
+          "movement": "\u6570\u5b57\u6eda\u52a8\u8ba1\u6570\uff1b\u7535\u91cf\u6761\u5fae\u7f29",
+          "transition_in": "cut",
+          "transition_out": "cut",
+          "overlay_notes": "\u6570\u5b57\u5361\uff1a\u5355\u6b21 12 \u5c0f\u65f6",
+          "shot_intent": "\u7528\u300c\u51e0\u4e4e\u4e0d\u52a8\u7684\u7535\u91cf\u6761\u300d\u76f4\u89c2\u4f20\u9012\u8d85\u957f\u7eed\u822a",
+          "narrative_role": "evidence",
+          "information_role": "\u89c2\u4f17\u8bb0\u4f4f\u300c\u5355\u6b21 12 \u5c0f\u65f6\u300d",
+          "hero_moment": false,
+          "required_assets": []
+        },
+        {
+          "id": "sc5",
+          "type": "animation",
+          "description": "\u300c48 \u5c0f\u65f6\u300d\u5927\u6570\u5b57\u4e0e\u300c\u914d\u5145\u7535\u76d2\u300d\u8bf4\u660e\u5f39\u51fa\uff0c\u914d\u5408\u4e00\u6761\u6a2a\u5411\u8fdb\u5ea6\u5bf9\u6bd4\uff08\u666e\u901a\u8033\u673a vs \u9759\u754c Pro\uff09\u3002",
+          "start_seconds": 20,
+          "end_seconds": 24,
+          "script_section_id": "s4",
+          "framing": "\u5bf9\u6bd4\u6761\u5c45\u4e2d\uff0c\u6570\u5b57\u4e0a\u65b9",
+          "movement": "\u6570\u5b57\u6eda\u52a8\uff1b\u5bf9\u6bd4\u6761\u4ece\u5de6\u5230\u53f3\u751f\u957f",
+          "transition_in": "cut",
+          "transition_out": "fade",
+          "overlay_notes": "\u6570\u5b57\u5361\uff1a\u914d\u5145\u7535\u76d2 48 \u5c0f\u65f6\uff1b\u5bf9\u6bd4\u6761\uff1a\u666e\u901a\u8033\u673a vs \u9759\u754c Pro",
+          "shot_intent": "\u5f3a\u5316\u603b\u7eed\u822a\u5356\u70b9\uff0c\u5236\u9020\u300c\u78be\u538b\u611f\u300d",
+          "narrative_role": "evidence",
+          "information_role": "\u89c2\u4f17\u8bb0\u4f4f\u300c48 \u5c0f\u65f6\u603b\u7eed\u822a\u300d",
+          "hero_moment": false,
+          "required_assets": []
+        },
+        {
+          "id": "sc6",
+          "type": "text_card",
+          "description": "\u4ea7\u54c1\u4e3b\u89c6\u89c9\u56fe\uff08\u8033\u673a\u60ac\u6d6e\uff0c\u6697\u8272\u80cc\u666f\uff09\u5c45\u4e2d\uff0c\u300c\u9759\u754c Pro\u300d\u54c1\u724c\u540d\u4e0e\u300c\u8ba9\u4e16\u754c\u5b89\u9759\u4e0b\u6765\u300d\u6807\u8bed\u5b9a\u683c\u3002",
+          "start_seconds": 24,
+          "end_seconds": 30,
+          "script_section_id": "s5",
+          "framing": "\u4ea7\u54c1\u5c45\u4e2d\uff0c\u54c1\u724c\u540d\u4e0b\u65b9",
+          "movement": "\u4ea7\u54c1\u56fe fade+scale \u5165\u573a\uff0c\u6807\u8bed\u9010\u5b57\u663e\u73b0",
+          "transition_in": "fade",
+          "transition_out": "fade",
+          "overlay_notes": "\u54c1\u724c\u540d\u300c\u9759\u754c Pro\u300d+ \u6807\u8bed\u300c\u8ba9\u4e16\u754c\u5b89\u9759\u4e0b\u6765\u300d",
+          "shot_intent": "\u54c1\u724c\u5b9a\u683c + \u60c5\u611f\u6536\u5c3e",
+          "narrative_role": "call_to_action",
+          "information_role": "\u89c2\u4f17\u8bb0\u4f4f\u4ea7\u54c1\u540d\u4e0e\u4e3b\u5f20",
+          "hero_moment": false,
+          "required_assets": [
+            {
+              "type": "image",
+              "description": "\u9759\u754c Pro \u65e0\u7ebf\u8033\u673a\u4ea7\u54c1\u4e3b\u89c6\u89c9\uff08\u6697\u8272\u80cc\u666f\u60ac\u6d6e\uff0c\u9ad8\u7aef\u8d28\u611f\uff09",
+              "source": "generate"
+            }
+          ]
+        }
+      ],
+      "metadata": {
+        "render_runtime": "hyperframes",
+        "animation_mode": "kinetic_type",
+        "reuse_strategy": {
+          "recurring_motifs": [
+            "noise-wave\uff08\u58f0\u6ce2\uff1a\u5608\u6742\u2192\u76f4\u7ebf\uff09",
+            "stat-number\uff08\u5927\u6570\u5b57\u6eda\u52a8\uff09",
+            "product-cta\uff08\u4ea7\u54c1\u5b9a\u683c\uff09"
+          ],
+          "transition_family": "cut \u4e3a\u4e3b\uff0c\u6536\u5c3e fade",
+          "template_count": 3,
+          "scene_count": 6
+        },
+        "tool_path_map": {
+          "narration": "doubao_tts",
+          "product_image": "google_imagen",
+          "music": "suno_music",
+          "compose": "video_compose (hyperframes)",
+          "mix": "audio_mixer"
+        },
+        "style_anchors": {
+          "palette": "\u6df1\u8272\u5e95 #0A0A12 + \u9ad8\u4eae\u9752 #22D3EE + \u767d\u5b57",
+          "typography": "\u7c97\u9ed1\u4f53\u5927\u5b57\u53f7\uff0c\u6570\u5b57\u66f4\u5927\u66f4\u4eae",
+          "motion_energy": "\u9ad8\u9891\u5f39\u6027\u3001\u5e72\u8106\uff0c\u53e5\u672b\u6536\u675f"
+        },
+        "global_audio_assets": [
+          {
+            "type": "narration",
+            "description": "\u4e2d\u6587\u65c1\u767d\uff08doubao\uff0c\u7ea6 106 \u5b57\uff09",
+            "source": "generate"
+          },
+          {
+            "type": "music",
+            "description": "\u79d1\u6280\u611f\u8f7b\u5feb BGM\uff08Suno\uff0c30s\uff09",
+            "source": "generate"
+          }
+        ]
+      }
+    }
+  },
+  "style_playbook": "flat-motion-graphics"
+}

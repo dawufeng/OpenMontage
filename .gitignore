@@ -85,6 +85,8 @@ remotion-composer/out/
 # throwaway and regenerable. Keeps the shared src/ free of one-off scenes.
 remotion-composer/projects/
 remotion-composer/public/*
+# Ship the local fonts required by the offline font loader.
+!remotion-composer/public/fonts/
 # But keep demo props (shipped with the project for zero-key demos)
 !remotion-composer/public/demo-props/
 # Ignore test/scratch compositions in demo-props (keep only curated demos)
@@ -101,3 +103,6 @@ venv/
 # Workspace-local third-party runtimes (for example the portable Blender LTS
 # used by blender_world). These are checksum-verified but never committed.
 .runtime/
+
+# Raw web captures can contain session credentials.
+*.dump

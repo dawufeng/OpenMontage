@@ -37,6 +37,8 @@ class DoubaoTTS(BaseTool):
     dependencies = []
     install_instructions = (
         "Set DOUBAO_SPEECH_API_KEY to a Volcengine Doubao Speech API Key.\n"
+        "A unified Volcengine Ark key (ARK_API_KEY / VOLCENGINE_ARK_API_KEY) is used "
+        "as a fallback when it is scoped for Doubao Speech too.\n"
         "Optional: set DOUBAO_SPEECH_VOICE_TYPE to the default speaker voice.\n"
         "Use the new console API key flow; do not pass app id/access token as the API key."
     )
@@ -175,8 +177,16 @@ class DoubaoTTS(BaseTool):
     DEFAULT_RESOURCE_ID = "seed-tts-2.0"
     DEFAULT_VOICE_ENV = "DOUBAO_SPEECH_VOICE_TYPE"
 
+    @staticmethod
+    def _get_api_key() -> str | None:
+        return (
+            os.environ.get("DOUBAO_SPEECH_API_KEY")
+            or os.environ.get("ARK_API_KEY")
+            or os.environ.get("VOLCENGINE_ARK_API_KEY")
+        )
+
     def get_status(self) -> ToolStatus:
-        if os.environ.get("DOUBAO_SPEECH_API_KEY"):
+        if self._get_api_key():
             return ToolStatus.AVAILABLE
         return ToolStatus.UNAVAILABLE
 
@@ -186,7 +196,7 @@ class DoubaoTTS(BaseTool):
         return round(len(inputs.get("text", "")) * 0.000015, 4)
 
     def execute(self, inputs: dict[str, Any]) -> ToolResult:
-        api_key = os.environ.get("DOUBAO_SPEECH_API_KEY")
+        api_key = self._get_api_key()
         if not api_key:
             return ToolResult(success=False, error="No Doubao Speech API key. " + self.install_instructions)
 
@@ -391,7 +401,12 @@ class DoubaoTTS(BaseTool):
     @staticmethod
     def _safe_error(exc: Exception) -> str:
         # Avoid ever echoing request headers or secrets in user-visible errors.
-        return str(exc).replace(os.environ.get("DOUBAO_SPEECH_API_KEY", ""), "[redacted]")
+        message = str(exc)
+        for env_name in ("DOUBAO_SPEECH_API_KEY", "ARK_API_KEY", "VOLCENGINE_ARK_API_KEY"):
+            secret = os.environ.get(env_name)
+            if secret:
+                message = message.replace(secret, "[redacted]")
+        return message
 
     @staticmethod
     def _extension_for_format(fmt: str) -> str:

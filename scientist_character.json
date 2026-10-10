@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "style": {},
+  "characters": [
+    {
+      "id": "main-character",
+      "display_name": "Main Character",
+      "role": "lead character",
+      "body_type": "simple rounded cartoon character",
+      "style": "local rigged cartoon",
+      "silhouette_notes": "",
+      "required_emotions": [
+        "neutral",
+        "curious",
+        "happy",
+        "surprised"
+      ],
+      "required_actions": [
+        "idle",
+        "blink",
+        "look",
+        "gesture"
+      ],
+      "required_views": [
+        "front",
+        "side"
+      ],
+      "props": [],
+      "constraints": []
+    }
+  ],
+  "metadata": {
+    "source": "character_spec_generator",
+    "brief": ""
+  }
+}

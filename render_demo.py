@@ -84,22 +84,29 @@ def render_demo(name: str, props_path: Path, npx_cmd: str) -> None:
     print(f"Output:    {output_path}")
     print()
 
-    subprocess.run(
-        [
-            npx_cmd,
-            "remotion",
-            "render",
-            "src/index.tsx",
-            "Explainer",
-            str(output_path),
-            "--props",
-            str(props_path),
-            "--codec",
-            "h264",
-        ],
-        cwd=COMPOSER_DIR,
-        check=True,
-    )
+    # Use the system Chrome to avoid headless-shell connection timeouts on Windows.
+    chrome_paths = [
+        "C:/Program Files/Google/Chrome/Application/chrome.exe",
+        "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+    ]
+    chrome_exe = next((p for p in chrome_paths if Path(p).exists()), None)
+
+    cmd = [
+        npx_cmd,
+        "remotion",
+        "render",
+        "src/index.tsx",
+        "Explainer",
+        str(output_path),
+        "--props",
+        str(props_path),
+        "--codec",
+        "h264",
+    ]
+    if chrome_exe:
+        cmd.extend(["--browser-executable", chrome_exe])
+
+    subprocess.run(cmd, cwd=COMPOSER_DIR, check=True)
 
     if output_path.exists():
         size_mb = output_path.stat().st_size / (1024 * 1024)

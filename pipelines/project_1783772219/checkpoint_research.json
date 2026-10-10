@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "project_id": "project_1783772219",
+  "pipeline_type": "cinematic",
+  "stage": "research",
+  "status": "completed",
+  "timestamp": "2026-07-11T00:00:00Z",
+  "checkpoint_policy": "guided",
+  "human_approval_required": false,
+  "human_approved": true,
+  "artifacts": {
+    "research_brief": "projects/project_1783772219/artifacts/research_brief.json"
+  },
+  "metadata": {
+    "note": "Preflight registry discovery (python -c ...) could not be executed in this session — sandbox blocks python/node executable invocation regardless of arguments. Capability picture was assembled manually from .env and tools/ source inspection instead. See decision_log d-001."
+  }
+}

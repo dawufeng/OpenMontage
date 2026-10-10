@@ -1,5 +1,5 @@
 import React from "react";
-import { loadFont } from "@remotion/google-fonts/SpaceGrotesk";
+import { loadSpaceGrotesk } from "./localFonts";
 import {
   AbsoluteFill,
   Audio,
@@ -18,7 +18,7 @@ import { resolveAsset } from "./lib/resolveAsset";
 
 const FPS = 30;
 
-const { fontFamily } = loadFont("normal", {
+const { fontFamily } = loadSpaceGrotesk("normal", {
   weights: ["400", "500", "700"],
   subsets: ["latin"],
 });
