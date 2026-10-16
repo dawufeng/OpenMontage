@@ -1,0 +1,18 @@
+{
+  "theme": "flat-motion-graphics",
+  "cuts": [
+    {
+      "id": "mvp-hook",
+      "source": "",
+      "type": "hero_title",
+      "in_seconds": 0,
+      "out_seconds": 5,
+      "text": "GlowStudio MVP",
+      "subtitle": "5-Second Video Generation Pipeline",
+      "backgroundColor": "#0F172A"
+    }
+  ],
+  "overlays": [],
+  "captions": [],
+  "audio": {}
+}

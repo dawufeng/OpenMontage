@@ -352,11 +352,24 @@ class SeedanceArkVideo(BaseTool):
         "Confirm the local artifact before the 24-hour remote URL expires",
     ]
 
+    def __init__(self, *, api_key=None, base_url=None, http_client=None, cny_per_usd=None):
+        explicit = any(value is not None for value in (api_key, base_url, http_client, cny_per_usd))
+        self._instance_config = (api_key, base_url or self.BASE_URL, 7.2 if cny_per_usd is None else cny_per_usd) if explicit else None
+        self._http_client = http_client
+
     def _get_api_key(self) -> str | None:
+        if self._instance_config is not None:
+            return self._instance_config[0]
         return os.environ.get("ARK_API_KEY") or os.environ.get("VOLCENGINE_ARK_API_KEY")
 
     def _get_base_url(self) -> str:
-        base_url = os.environ.get("ARK_BASE_URL", self.BASE_URL).rstrip("/")
+        if self._instance_config is not None:
+            return self._instance_config[1]
+        base_url = (os.environ.get("ARK_BASE_URL") or os.environ.get("VOLCENGINE_ARK_BASE_URL") or self.BASE_URL).rstrip("/")
+        # Agent Plan uses a separate subscription endpoint. Never silently
+        # fall back to the pay-as-you-go /api/v3 endpoint with a plan key.
+        if base_url.endswith("/api/plan"):
+            base_url += "/v3"
         if not base_url.startswith("https://"):
             raise ValueError("ARK_BASE_URL must be an https:// URL")
         return base_url
@@ -445,10 +458,9 @@ class SeedanceArkVideo(BaseTool):
             )
         return value
 
-    @staticmethod
-    def _get_cny_per_usd() -> float:
+    def _get_cny_per_usd(self) -> float:
         try:
-            value = float(os.environ.get("ARK_CNY_PER_USD", "7.2"))
+            value = float(self._instance_config[2] if self._instance_config is not None else os.environ.get("ARK_CNY_PER_USD", "7.2"))
         except (TypeError, ValueError) as exc:
             raise ValueError(
                 "ARK_CNY_PER_USD must be a finite number greater than 0"
@@ -482,6 +494,11 @@ class SeedanceArkVideo(BaseTool):
         }
         try:
             base_url = self._get_base_url()
+            result['api_contract'] = {
+                'create': f'POST {base_url}/contents/generations/tasks',
+                'query': f'GET {base_url}/contents/generations/tasks/{{task_id}}',
+                'cancel': f'DELETE {base_url}/contents/generations/tasks/{{task_id}}',
+            }
             api_key = self._get_api_key()
             if api_key and api_key.lower().startswith("bearer "):
                 raise ValueError(
@@ -605,6 +622,7 @@ class SeedanceArkVideo(BaseTool):
                         "status": "submitted",
                         "provider": self.provider,
                         "model": model,
+                        "request_id": getattr(self, '_last_create_request_id', None),
                     },
                     cost_usd=estimated_cost_usd,
                     model=model,
@@ -668,12 +686,14 @@ class SeedanceArkVideo(BaseTool):
             )
         except Exception as exc:
             error_data: dict[str, Any] = {}
+            if action in {'create', 'generate'} and getattr(self, '_last_create_request_id', None):
+                error_data['request_id'] = self._last_create_request_id
             if task_id:
-                error_data = {
+                error_data.update({
                     "task_id": task_id,
                     "status": "submitted_result_unknown",
                     "recovery_action": "query",
-                }
+                })
             elif action in {"query", "cancel"} and inputs.get("task_id"):
                 error_data = {"task_id": str(inputs["task_id"])}
             return ToolResult(
@@ -1252,12 +1272,15 @@ class SeedanceArkVideo(BaseTool):
     def _create_task(self, payload: dict[str, Any], api_key: str) -> str:
         import requests
 
-        response = requests.post(
+        self._last_create_request_id = None
+        response = (self._http_client or requests).post(
             f"{self._get_base_url()}/contents/generations/tasks",
             headers=self._headers(api_key),
             json=payload,
             timeout=30,
         )
+        headers = getattr(response, 'headers', {}) or {}
+        self._last_create_request_id = headers.get('X-Request-Id') or headers.get('x-request-id')
         self._raise_for_status(response)
         data = response.json()
         task_id = data.get("id")
@@ -1268,6 +1291,13 @@ class SeedanceArkVideo(BaseTool):
         import requests
 
         url = f"{self._get_base_url()}/contents/generations/tasks/{task_id}"
+        if self._http_client is not None:
+            response = self._http_client.get(url, headers=self._headers(api_key), timeout=30)
+            self._raise_for_status(response)
+            data = response.json()
+            if not isinstance(data, dict):
+                raise RuntimeError("Ark query returned a non-object response")
+            return data
         response = None
         for attempt in range(self.retry_policy.max_retries + 1):
             try:

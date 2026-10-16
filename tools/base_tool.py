@@ -23,11 +23,11 @@ from typing import Any, Callable, Optional
 
 
 def _load_dotenv() -> None:
-    """Load .env into os.environ once at import time.
+    """Explicit standalone entry point for loading the engine environment.
 
-    This ensures API keys are available before any tool is instantiated,
-    even when tools are imported directly without going through the registry.
-    Only sets variables that are not already in the environment.
+    Imports and instance-injected tools must not read dotenv or mutate global
+    configuration. CLI callers may opt in; existing environment values win.
+    Registry discovery also provides its own explicit loading entry point.
     """
     env_path = Path(__file__).resolve().parent.parent / ".env"
     if not env_path.is_file():
@@ -55,9 +55,6 @@ def _load_dotenv() -> None:
                 value = value.strip()
             if key and key not in os.environ:
                 os.environ[key] = value
-
-
-_load_dotenv()
 
 
 class ToolTier(str, Enum):

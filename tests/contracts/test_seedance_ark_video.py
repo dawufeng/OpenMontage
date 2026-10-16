@@ -24,6 +24,7 @@ class _FakeResponse:
     ) -> None:
         self._payload = payload if payload is not None else {}
         self.content = content
+        self.headers: dict[str, str] = {}
         self.status_code = status_code
 
     def json(self) -> dict:
@@ -34,7 +35,24 @@ class _FakeResponse:
             raise RuntimeError(f"HTTP {self.status_code}: {self._payload}")
 
 
+@pytest.fixture(autouse=True)
+def isolated_provider_configuration(monkeypatch):
+    # Never let the developer's real Plan endpoint/credentials affect mocked
+    # on-demand contract cases. Individual tests set their own fake values.
+    monkeypatch.setenv("ARK_BASE_URL", "https://ark.cn-beijing.volces.com/api/v3")
+    for key in ("VOLCENGINE_ARK_BASE_URL", "ARK_API_KEY", "VOLCENGINE_ARK_API_KEY",
+                "ARK_SEEDANCE_MODEL", "ARK_CNY_PER_USD"):
+        monkeypatch.delenv(key, raising=False)
+
+
 class TestContract:
+    def test_configured_agent_plan_base_uses_v3(self, monkeypatch):
+        monkeypatch.delenv("ARK_BASE_URL", raising=False)
+        monkeypatch.setenv("VOLCENGINE_ARK_BASE_URL", "https://ark.cn-beijing.volces.com/api/plan")
+        assert SeedanceArkVideo()._get_base_url() == "https://ark.cn-beijing.volces.com/api/plan/v3"
+        monkeypatch.setenv("ARK_BASE_URL", "https://ark.cn-beijing.volces.com/api/v3")
+        assert SeedanceArkVideo()._get_base_url() == "https://ark.cn-beijing.volces.com/api/v3"
+
     def test_identity_and_capabilities(self):
         assert issubclass(SeedanceArkVideo, BaseTool)
         tool = SeedanceArkVideo()
@@ -87,6 +105,15 @@ class TestContract:
 
 
 class TestTaskActions:
+    def test_create_preserves_real_response_request_id(self, monkeypatch):
+        monkeypatch.setenv('ARK_API_KEY', 'fake-ark-key')
+        response = _FakeResponse({'id': 'cgt-test-request-id'})
+        response.headers = {'X-Request-Id': 'synthetic-request-header'}
+        monkeypatch.setattr('requests.post', lambda *a, **k: response)
+        result = SeedanceArkVideo().execute({'task_action': 'create', 'prompt': 'synthetic', 'model_variant': 'fast', 'duration': 5, 'resolution': '480p'})
+        assert result.success
+        assert result.data['request_id'] == 'synthetic-request-header'
+
     def test_create_uses_official_endpoint_bearer_auth_and_body(self, monkeypatch):
         monkeypatch.setenv("ARK_API_KEY", "fake-ark-key")
         captured = {}

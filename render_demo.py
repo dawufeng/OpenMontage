@@ -88,6 +88,9 @@ def render_demo(name: str, props_path: Path, npx_cmd: str) -> None:
     chrome_paths = [
         "C:/Program Files/Google/Chrome/Application/chrome.exe",
         "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+        "/usr/bin/google-chrome",
+        "/usr/bin/chromium",
+        "/usr/bin/chromium-browser",
     ]
     chrome_exe = next((p for p in chrome_paths if Path(p).exists()), None)
 

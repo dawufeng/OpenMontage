@@ -2378,6 +2378,12 @@ class VideoCompose(BaseTool):
             "mix_intelligible": True,
             "issues": [],
         }
+        intentional_silence = bool(
+            edit_decisions and proposal_packet
+            and (edit_decisions.get('metadata') or {}).get('audio_intent') == 'silent'
+            and (proposal_packet.get('metadata') or {}).get('audio_intent') == 'silent'
+        )
+        audio_spotcheck['intentional_silence'] = intentional_silence
         if technical_probe.get("has_audio") and duration > 0:
             try:
                 # Use ffmpeg volumedetect to check audio levels
@@ -2405,7 +2411,7 @@ class VideoCompose(BaseTool):
                             pass
 
                 if mean_vol is not None:
-                    if mean_vol < -60:
+                    if mean_vol < -60 and not intentional_silence:
                         audio_spotcheck["unexpected_silence"] = True
                         audio_spotcheck["issues"].append(
                             f"Mean volume {mean_vol:.1f} dB — effectively silent"

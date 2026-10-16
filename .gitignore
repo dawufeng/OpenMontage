@@ -106,3 +106,4 @@ venv/
 
 # Raw web captures can contain session credentials.
 *.dump
+.venv
