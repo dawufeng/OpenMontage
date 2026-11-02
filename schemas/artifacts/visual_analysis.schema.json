@@ -1,0 +1,446 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "visual_analysis",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "1.0"
+    },
+    "status": {
+      "enum": [
+        "ready",
+        "incomplete"
+      ]
+    },
+    "shots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "start_seconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "end_seconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "aspects": {
+            "type": "object",
+            "properties": {
+              "subject": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "observed",
+                      "absent",
+                      "unknown"
+                    ]
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "evidence_timestamps": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "status",
+                  "description",
+                  "confidence",
+                  "evidence_timestamps"
+                ],
+                "additionalProperties": false
+              },
+              "subject_motion": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "observed",
+                      "absent",
+                      "unknown"
+                    ]
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "evidence_timestamps": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "status",
+                  "description",
+                  "confidence",
+                  "evidence_timestamps"
+                ],
+                "additionalProperties": false
+              },
+              "scene": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "observed",
+                      "absent",
+                      "unknown"
+                    ]
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "evidence_timestamps": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "status",
+                  "description",
+                  "confidence",
+                  "evidence_timestamps"
+                ],
+                "additionalProperties": false
+              },
+              "spatial_framing": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "observed",
+                      "absent",
+                      "unknown"
+                    ]
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "evidence_timestamps": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "status",
+                  "description",
+                  "confidence",
+                  "evidence_timestamps"
+                ],
+                "additionalProperties": false
+              },
+              "camera": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "observed",
+                      "absent",
+                      "unknown"
+                    ]
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "evidence_timestamps": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "status",
+                  "description",
+                  "confidence",
+                  "evidence_timestamps"
+                ],
+                "additionalProperties": false
+              },
+              "typography": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "observed",
+                      "absent",
+                      "unknown"
+                    ]
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "evidence_timestamps": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "status",
+                  "description",
+                  "confidence",
+                  "evidence_timestamps"
+                ],
+                "additionalProperties": false
+              },
+              "interaction": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "observed",
+                      "absent",
+                      "unknown"
+                    ]
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "evidence_timestamps": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "status",
+                  "description",
+                  "confidence",
+                  "evidence_timestamps"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "subject",
+              "subject_motion",
+              "scene",
+              "spatial_framing",
+              "camera",
+              "typography",
+              "interaction"
+            ],
+            "additionalProperties": false
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "type": {
+                  "enum": [
+                    "subject_motion",
+                    "text",
+                    "interaction"
+                  ]
+                },
+                "start_seconds": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "end_seconds": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence_timestamps": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "uniqueItems": true
+                },
+                "required_capabilities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                },
+                "anchor": {
+                  "type": "object",
+                  "required": [
+                    "render_mode",
+                    "binding"
+                  ],
+                  "properties": {
+                    "render_mode": {
+                      "enum": [
+                        "flat",
+                        "3d"
+                      ]
+                    },
+                    "binding": {
+                      "enum": [
+                        "screen",
+                        "subject"
+                      ]
+                    },
+                    "target": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "interaction_mode": {
+                      "enum": [
+                        "temporal_sync",
+                        "subject_follow",
+                        "occlusion"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "id",
+                "type",
+                "start_seconds",
+                "end_seconds",
+                "description",
+                "evidence_timestamps",
+                "required_capabilities"
+              ],
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "type": {
+                        "enum": [
+                          "text",
+                          "interaction"
+                        ]
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "anchor"
+                    ]
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "type": {
+                        "const": "interaction"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "anchor": {
+                        "required": [
+                          "interaction_mode"
+                        ]
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "start_seconds",
+          "end_seconds",
+          "aspects",
+          "events"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "version",
+    "status",
+    "shots",
+    "issues"
+  ],
+  "additionalProperties": false
+}

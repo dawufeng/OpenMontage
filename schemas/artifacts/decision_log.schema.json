@@ -25,6 +25,7 @@
           "category": {
             "type": "string",
             "enum": [
+              "approval_policy",
               "pipeline_selection",
               "provider_selection",
               "renderer_family_selection",

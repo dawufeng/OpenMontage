@@ -337,6 +337,19 @@ class VideoCompose(BaseTool):
         start = time.time()
 
         try:
+            reference_root = None
+            original_output = None
+            if operation in {"compose", "render", "remotion_render"}:
+                from lib.reference_style import find_reference_project, validate_reference_stage, project_path
+                reference_root = find_reference_project(inputs)
+                if reference_root is not None and validate_reference_stage(reference_root, "compose", inputs, output_path=inputs.get("output_path")):
+                    import uuid
+                    original_output = project_path(reference_root, inputs.get("output_path", "renders/final.mp4"))
+                    candidate = project_path(reference_root, "renders/reference_candidates/" + uuid.uuid4().hex + original_output.suffix)
+                    candidate.parent.mkdir(parents=True, exist_ok=True)
+                    inputs = dict(inputs, output_path=str(candidate))
+                else:
+                    reference_root = None
             if operation == "compose":
                 result = self._compose(inputs)
             elif operation == "render":
@@ -354,6 +367,13 @@ class VideoCompose(BaseTool):
         except Exception as e:
             return ToolResult(success=False, error=str(e))
 
+        if reference_root is not None and result.success:
+            # The candidate is deliberately not published. Real visual review
+            # occurs after rendering; publish_reference_candidate validates its
+            # provenance and atomically promotes it only after all checks pass.
+            result.success = False
+            result.error = "Reference review required; rendered candidate retained and existing output preserved"
+            result.data = dict(result.data or {}, reference_candidate_path=inputs["output_path"], requested_output_path=str(original_output), reference_status="awaiting_review")
         result.duration_seconds = round(time.time() - start, 2)
         return result
 

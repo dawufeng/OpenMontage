@@ -16,6 +16,8 @@ reference_input:
   analysis_depth: standard
   analysis_tools:
     - video_analyzer
+    - reference_analyzer
+    - reference_reviewer
     - transcript_fetcher
     - video_downloader
     - scene_detect

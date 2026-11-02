@@ -246,7 +246,7 @@ class ToolRegistry:
                 summary[tier.value] = counts
         return summary
 
-    def provider_menu(self) -> dict[str, dict[str, Any]]:
+    def provider_menu(self, capabilities: Optional[list[str]] = None) -> dict[str, dict[str, Any]]:
         """Generate a capability-grouped provider menu for user-facing display.
 
         Returns a dict like:
@@ -264,11 +264,14 @@ class ToolRegistry:
         output and presents it to the user.  Adding a new tool to tools/ is
         enough; this method auto-discovers it.
         """
+        # An explicit scope limits live dependency/status probes, not discovery.
+        # Omitted capabilities are uninspected. None preserves the full menu.
         self.ensure_discovered()
         menu: dict[str, dict[str, Any]] = {}
 
         # Skip selectors — they aggregate, they aren't providers themselves
-        tools = [t for t in self._tools.values() if t.provider != "selector"]
+        tools = [t for t in self._tools.values() if t.provider != "selector"
+                 and (capabilities is None or t.capability in capabilities)]
 
         for tool in tools:
             cap = tool.capability
@@ -276,7 +279,7 @@ class ToolRegistry:
                 menu[cap] = {"available": [], "unavailable": [], "total": 0, "configured": 0}
 
             info = tool.get_info()
-            status = tool.get_status()
+            status = ToolStatus(info["status"])
             entry = {
                 "name": tool.name,
                 "provider": tool.provider,
@@ -290,6 +293,7 @@ class ToolRegistry:
                 "source_provider_menu",
                 "source_provider_summary",
                 "render_engines",
+                "hyperframes_runtime",
                 "remotion_note",
                 "provider_matrix",
                 "setup_offer",
@@ -313,7 +317,7 @@ class ToolRegistry:
 
         return dict(sorted(menu.items()))
 
-    def provider_menu_summary(self) -> dict[str, Any]:
+    def provider_menu_summary(self, capabilities: Optional[list[str]] = None) -> dict[str, Any]:
         """Compact, human-ready rollup of provider_menu() for onboarding/preflight.
 
         Returns a dict shaped for the "N of M configured" capability menu the
@@ -351,22 +355,24 @@ class ToolRegistry:
         raw. See AGENT_GUIDE.md > "Provider Menu (Mandatory at Preflight)".
         """
         self.ensure_discovered()
-        menu = self.provider_menu()
+        menu = self.provider_menu(capabilities=capabilities)
 
         # Composition runtimes — lift from video_compose.get_info() since
         # they're the signal the runtime-selection contract depends on.
         comp_runtimes: dict[str, bool] = {}
         runtime_warnings: list[str] = []
-        vc = self._tools.get("video_compose")
-        if vc is not None:
-            info = vc.get_info()
+        info = next((entry for bucket in menu.values()
+                     for entry in bucket["available"] + bucket["unavailable"]
+                     if entry["name"] == "video_compose"), None)
+        if info is not None:
             engines = info.get("render_engines") or {}
             comp_runtimes = {k: bool(v) for k, v in engines.items()}
         # If hyperframes_compose is registered, surface its npm-resolve reasons
         # explicitly — those are the "looks available but isn't" failures.
-        hf = self._tools.get("hyperframes_compose")
-        if hf is not None:
-            hf_info = hf.get_info()
+        hf_info = next((entry for bucket in menu.values()
+                        for entry in bucket["available"] + bucket["unavailable"]
+                        if entry["name"] == "hyperframes_compose"), None)
+        if hf_info is not None:
             rc = hf_info.get("hyperframes_runtime") or {}
             for reason in rc.get("reasons") or []:
                 runtime_warnings.append(f"hyperframes: {reason}")

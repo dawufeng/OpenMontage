@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "object_tracking_receipt",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "1.0"
+    },
+    "capability": {
+      "const": "object_tracking"
+    },
+    "tool": {
+      "const": "object_tracker"
+    },
+    "algorithm": {
+      "const": "lk_translation_v1"
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "size_bytes"
+      ],
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "initial_bbox": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "start_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "end_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "max_frames": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 300
+        }
+      },
+      "required": [
+        "initial_bbox",
+        "start_seconds",
+        "end_seconds",
+        "max_frames"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "enum": [
+        "complete",
+        "lost"
+      ]
+    },
+    "samples": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 300,
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp_seconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "number"
+            }
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "timestamp_seconds",
+          "bbox",
+          "confidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "diagnostics": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "version",
+    "capability",
+    "tool",
+    "algorithm",
+    "source",
+    "params",
+    "status",
+    "samples",
+    "diagnostics"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "complete"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "samples": {
+            "minItems": 2
+          }
+        }
+      }
+    }
+  ]
+}

@@ -25,6 +25,11 @@ Do NOT trigger when:
 
 ## Protocol
 
+### Required reference-style execution contract
+
+Read `skills/meta/reference-style-execution.md` before performing reference analysis or any downstream production stage. Structural extraction alone is not visual understanding. Populate and validate `video_analysis_brief.visual_analysis` through `reference_analyzer`, then preserve its shot/event identities in `reference_style_plan`. Missing or unknown observations are incomplete, never evidence that an effect is absent. Do not advance a reference-driven production on an empty visual brief.
+
+
 ### Step 1: Analyze the Reference
 
 Run VideoAnalyzer with `analysis_depth: "standard"`:
@@ -69,13 +74,14 @@ The 5-aspect block above is the **canonical form** that `proposal-director`, `sc
 `motion_type` ("motion_clip", "animated_still", "static_image") and `flow_variance`.
 Use this to determine the production approach:
 
-- If most scenes are `motion_clip` → the reference uses **video generation** (Kling,
-  MiniMax, etc.) → plan around video gen tools, not image gen
+- If most scenes are `motion_clip`, preserve temporal motion in the production plan.
+  Optical flow does not establish whether the source was filmed or AI-generated;
+  do not infer the production provider from this classification.
 - If most scenes are `animated_still` → the reference uses **still images with
   Ken Burns / pan-zoom** → image gen + Remotion/FFmpeg composition is appropriate
 - If mixed → note which sections use motion and which use stills
 
-**Never guess** whether a reference uses images or video. Read the `motion_type` field.
+**Never infer the source production method from optical flow.** Read `motion_type` as a coarse motion measurement and confirm the visible treatment from sequential frames.
 Getting this wrong leads to proposing the wrong pipeline and wrong tool path.
 
 **Vision analysis:** After presenting the structural data, examine the extracted

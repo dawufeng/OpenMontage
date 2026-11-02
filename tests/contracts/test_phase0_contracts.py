@@ -343,7 +343,7 @@ class TestCheckpoint:
             tmp_path,
             "proj",
             "proposal",
-            "completed",
+            "in_progress",
             {
                 "proposal_packet": sample_artifact("proposal_packet"),
                 "video_analysis_brief": sample_artifact("video_analysis_brief"),
@@ -431,9 +431,12 @@ class TestToolRegistry:
         assert len(reg.get_by_tier(ToolTier.CORE)) == 1
         assert len(reg.find_by_capability("test")) == 1
 
-    def test_support_envelope(self):
+    def test_support_envelope(self, monkeypatch):
         reg = ToolRegistry()
         reg.register(DummyTool())
+        # This test covers the explicitly registered dummy, not live providers.
+        # Real discovery has its own isolated package test below.
+        monkeypatch.setattr(reg, "ensure_discovered", lambda: None)
         envelope = reg.support_envelope()
         assert "dummy" in envelope
         assert envelope["dummy"]["status"] == "available"

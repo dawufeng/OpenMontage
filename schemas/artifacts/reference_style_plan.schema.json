@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "reference_style_plan",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "1.0"
+    },
+    "shots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "reference_shot_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scene_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "preserve_event_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "subject_generation": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "description"
+            ],
+            "additionalProperties": false
+          },
+          "overlays": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "event_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "event_id",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required_capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "target_video_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "execution_receipts": {
+            "type": "array",
+            "maxItems": 120,
+            "items": {
+              "type": "object",
+              "properties": {
+                "capability": {
+                  "const": "object_tracking"
+                },
+                "receipt_path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "required": [
+                "capability",
+                "receipt_path",
+                "event_ids"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "reference_shot_id",
+          "scene_id",
+          "preserve_event_ids",
+          "subject_generation",
+          "overlays",
+          "required_capabilities"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "available_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "version",
+    "shots",
+    "available_capabilities"
+  ],
+  "additionalProperties": false
+}
