@@ -368,6 +368,7 @@ class VideoAnalyzer(BaseTool):
                 "depth": depth,
                 "steps_completed": steps_completed,
                 "steps_failed": steps_failed,
+                "visual_analysis_status": "not_performed",
                 "duration_seconds": round(time.time() - start, 2),
             }
             self._save_brief(brief, output_dir)
@@ -568,6 +569,8 @@ class VideoAnalyzer(BaseTool):
             "keyframe_count": len(keyframes),
             "scene_count": len(scenes),
             "has_transcript": transcript_data is not None,
+            "visual_analysis_status": "not_performed",
+            "motion_evidence_method": "optical_flow_heuristic_not_semantic_or_origin_evidence",
             "duration_seconds": round(time.time() - start, 2),
         }
 
@@ -603,33 +606,23 @@ class VideoAnalyzer(BaseTool):
         self, scenes: list[dict], max_frames: int, depth: str
     ) -> list[float]:
         """Compute optimal keyframe timestamps from scene boundaries."""
+        if max_frames <= 0:
+            return []
+        # Allocate in rounds so short shots receive coverage before extra frames
+        # go to long shots. Relative offsets never escape sub-100ms scenes.
+        fractions = (.1, .9, .5, .3, .7) if depth == "deep" else (.1, .9)
         timestamps = []
-
-        for scene in scenes:
-            start = scene.get("start_seconds", 0)
-            end = scene.get("end_seconds", 0)
-            duration = end - start
-
-            # First frame of each scene
-            timestamps.append(start + 0.1)
-
-            # Midpoint for scenes > 3 seconds
-            if duration > 3.0:
-                timestamps.append(start + duration / 2)
-
-            # For deep analysis, add more intra-scene samples
-            if depth == "deep" and duration > 6.0:
-                timestamps.append(start + duration * 0.25)
-                timestamps.append(start + duration * 0.75)
-
-        # Deduplicate, sort, and limit
-        timestamps = sorted(set(round(t, 3) for t in timestamps))
-        if len(timestamps) > max_frames:
-            # Uniform subsample to max_frames
-            step = len(timestamps) / max_frames
-            timestamps = [timestamps[int(i * step)] for i in range(max_frames)]
-
-        return timestamps
+        for fraction in fractions:
+            for scene in scenes:
+                start = float(scene.get("start_seconds", 0))
+                end = float(scene.get("end_seconds", 0))
+                if end > start:
+                    timestamp = start + (end - start) * fraction
+                    if timestamp not in timestamps:
+                        timestamps.append(timestamp)
+                        if len(timestamps) >= max_frames:
+                            return sorted(timestamps)
+        return sorted(timestamps)
 
     def _timestamp_to_scene(self, ts: float, scenes: list[dict]) -> int:
         """Map a timestamp to its scene index."""

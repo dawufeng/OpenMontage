@@ -28,9 +28,10 @@ This is a first-class workflow in OpenMontage.
 
 ### Required behavior
 
-1. **Read:** `skills/meta/video-reference-analyst.md`
+1. **Read:** `skills/meta/video-reference-analyst.md` and `skills/meta/reference-style-execution.md`
 2. **Run the reference analysis workflow** using the local analysis tools (`video_analyzer`, transcript extraction, scene detection, frame sampling)
-3. **Produce a grounded summary** of what the reference is doing:
+3. **Complete structured visual analysis** with `reference_analyzer` before planning. A successful `video_analyzer` extraction is not a completed visual analysis. Preserve unknown states and report missing vision capability.
+4. **Produce a grounded summary** of what the reference is doing:
    - content
    - pacing
    - structure

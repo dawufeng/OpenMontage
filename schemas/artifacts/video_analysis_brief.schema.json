@@ -207,6 +207,19 @@
         "playbook_customizations": { "type": "object" }
       }
     },
+    "visual_analysis": { "$ref": "urn:openmontage:visual_analysis" },
+    "sampled_frames": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["shot_id", "timestamp_seconds", "path"],
+        "properties": {
+          "shot_id": { "type": "string", "minLength": 1 },
+          "timestamp_seconds": { "type": "number", "minimum": 0 },
+          "path": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
     "keyframes": {
       "type": "array",
       "items": {

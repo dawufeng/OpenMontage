@@ -10,13 +10,50 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
 
-from tools.base_tool import ToolStatus
+from tools.base_tool import ToolRuntime, ToolStatus
 from tools.video.hyperframes_compose import HyperFramesCompose
 from tools.video.video_compose import VideoCompose
+
+
+@pytest.fixture
+def offline_registry(monkeypatch):
+    """Menu contract tests must not discover/probe real installed providers."""
+    import socket
+    import subprocess
+    from tools.tool_registry import registry
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("Menu unit tests must not run external probes")
+    monkeypatch.setattr(socket.socket, "connect", forbidden)
+    monkeypatch.setattr(subprocess, "run", forbidden)
+    monkeypatch.setattr(registry, "_tools", {})
+    monkeypatch.setattr(registry, "_discovered_packages", set())
+
+    def add(name, capability, provider, status="available", **extra):
+        info = {"status": status, "dependencies": [], **extra}
+        registry.register(SimpleNamespace(
+            name=name, capability=capability, provider=provider,
+            runtime=ToolRuntime.LOCAL, best_for=[],
+            install_instructions="One \u2014 two \u2013 three",
+            get_info=lambda: dict(info), get_status=forbidden,
+        ))
+
+    def discover(package_name="tools"):
+        add("video_compose", "video_post", "ffmpeg",
+            render_engines={"ffmpeg": True, "remotion": False, "hyperframes": False})
+        add("hyperframes_compose", "video_post", "hyperframes", "unavailable",
+            hyperframes_runtime={"reasons": ["offline \u2014 fixture"]})
+        add("video_a", "video_generation", "same_provider")
+        add("video_b", "video_generation", "same_provider", "unavailable")
+        registry._discovered_packages.add(package_name)
+        return list(registry._tools)
+    monkeypatch.setattr(registry, "discover", discover)
+    return registry
 
 
 # ------------------------------------------------------------------
@@ -143,7 +180,7 @@ def test_animation_proposal_director_has_no_hardcoded_costs_or_keys():
     )
 
 
-def test_provider_menu_summary_deduplicates_providers_across_buckets():
+def test_provider_menu_summary_deduplicates_providers_across_buckets(offline_registry):
     """Regression: when a provider has multiple tools (e.g. two seedance tools
     both reporting provider='seedance'), the summary previously listed the
     provider as BOTH available and unavailable — reads as a contradiction to
@@ -163,7 +200,7 @@ def test_provider_menu_summary_deduplicates_providers_across_buckets():
         )
 
 
-def test_provider_menu_summary_is_cp1252_safe():
+def test_provider_menu_summary_is_cp1252_safe(offline_registry):
     """Regression: on Windows cp1252 stdout, printing any string with an
     em-dash crashes with UnicodeEncodeError (or renders as `?` / mojibake).
     provider_menu_summary() post-processes its output via
@@ -309,7 +346,7 @@ def test_video_compose_render_engines_follow_hyperframes_runtime_check(monkeypat
     )
 
 
-def test_provider_menu_summary_returns_expected_shape():
+def test_provider_menu_summary_returns_expected_shape(offline_registry):
     """Regression: AGENT_GUIDE.md line 246 points agents at provider_menu_summary
     for the capability menu. The shape must be stable and cover the four fields
     the guide references."""

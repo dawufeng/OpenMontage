@@ -45,6 +45,8 @@ SUPPLEMENTARY_ARTIFACTS = {
     "source_media_review",  # Required before first planning stage when user media exists
     "final_review",         # Required by compose stage before presenting to user
     "video_analysis_brief", # Reference-video grounding artifact carried alongside stages
+    "reference_style_plan",
+    "reference_style_review",
 }
 
 
@@ -453,6 +455,14 @@ def write_checkpoint(
         if not style_playbook and marker.get("style_playbook"):
             style_playbook = marker["style_playbook"]
     _validate_style_playbook(style_playbook)
+
+    if status in {"completed", "awaiting_human"}:
+        from lib.reference_style import validate_reference_stage
+        try:
+            validate_reference_stage(pipeline_dir / project_id, stage, artifacts,
+                                     require_review=stage in {"compose", "publish"})
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            raise CheckpointValidationError(f"Reference production blocked: {exc}") from exc
 
     valid_stages = (
         set(get_pipeline_stages(pipeline_type)) if pipeline_type

@@ -31,6 +31,9 @@ ARTIFACT_NAMES = [
     "final_review",
     "character_qa_report",
     "video_analysis_brief",
+    "visual_analysis",
+    "reference_style_plan",
+    "reference_style_review",
 ]
 
 
@@ -46,7 +49,10 @@ def load_schema(name: str) -> dict:
 def validate_artifact(name: str, data: dict[str, Any]) -> None:
     """Validate artifact data against its schema. Raises on failure."""
     schema = load_schema(name)
-    jsonschema.validate(instance=data, schema=schema)
+    from referencing import Registry, Resource
+    visual_resource = Resource.from_contents(load_schema("visual_analysis"))
+    registry = Registry().with_resource("urn:openmontage:visual_analysis", visual_resource)
+    jsonschema.Draft202012Validator(schema, registry=registry).validate(data)
 
 
 def list_schemas() -> list[str]:

@@ -141,6 +141,51 @@ class VideoUnderstand(BaseTool):
         except ImportError:
             return ToolStatus.UNAVAILABLE
 
+    def analyze_reference_frames(self, *, image_paths, timestamps, query, model) -> ToolResult:
+        """Structured temporal QA using a user-selected, already installed model.
+
+        Deliberately separate from get_status: installed Python packages do not
+        mean any vision weights are installed. This entry point never downloads.
+        The labelled contact sheet is passed as actual pixels to the processor.
+        """
+        try:
+            if not 2 <= len(image_paths) <= 120 or len(image_paths) != len(timestamps):
+                raise ValueError('At least two timestamped images are required')
+            local_model = Path(model)
+            if not local_model.is_dir() or not (local_model / 'config.json').is_file():
+                raise ValueError('Selected local model directory is not installed')
+            from PIL import Image, ImageDraw
+            import torch
+            from transformers import AutoProcessor, AutoModelForVision2Seq
+
+            processor = AutoProcessor.from_pretrained(str(local_model), local_files_only=True, trust_remote_code=False)
+            vision = AutoModelForVision2Seq.from_pretrained(str(local_model), local_files_only=True, trust_remote_code=False)
+            images = []
+            for path in image_paths:
+                with Image.open(path) as source:
+                    image = source.convert('RGB')
+                    image.thumbnail((512, 384))
+                    images.append(image)
+            columns = min(3, len(images))
+            rows = (len(images) + columns - 1) // columns
+            sheet = Image.new('RGB', (512 * columns, 412 * rows), 'white')
+            draw = ImageDraw.Draw(sheet)
+            for index, (image, timestamp) in enumerate(zip(images, timestamps)):
+                x, y = (index % columns) * 512, (index // columns) * 412
+                sheet.paste(image, (x, y + 28))
+                draw.text((x + 4, y + 4), f'Frame {index + 1}: t={timestamp:.9f}s', fill='black')
+            prompt = '<image>\n' + query + '\nOrdered timestamps: ' + repr(timestamps)
+            tensors = processor(images=sheet, text=prompt, return_tensors='pt')
+            with torch.inference_mode():
+                generated = vision.generate(**tensors, max_new_tokens=2048, do_sample=False)
+            # Decoder-only models include the prompt, encoder-decoder models do not.
+            if not getattr(vision.config, 'is_encoder_decoder', False) and 'input_ids' in tensors:
+                generated = generated[:, tensors['input_ids'].shape[1]:]
+            response = processor.batch_decode(generated, skip_special_tokens=True)[0].strip()
+            return ToolResult(success=True, data={'response': response}, model=str(local_model))
+        except Exception as exc:
+            return ToolResult(success=False, error=f'Local temporal visual analysis unavailable: {exc}')
+
     def estimate_runtime(self, inputs: dict[str, Any]) -> float:
         """Estimate runtime in seconds based on mode and frame count."""
         max_frames = inputs.get("max_frames", 5)
